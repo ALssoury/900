@@ -5011,11 +5011,16 @@ async function doJBwithPSFreeLapseExploit() {
       window.log("Failed to load HEN!\nPlease restart console and try again...");
       return;
     }
-    window.log("GoldHen loaded\n\nPSFree+Lapse Webkit by Kameleon\nAIO Fix by ABC");
+    // ... (الكود قبله)
+    window.log("GoldHen loaded\\n\\nPSFree+Lapse Webkit by Kameleon\\nAIO Fix by ABC");
+    
+    // ===============================================
+    // أضف هذا السطر هنا:
+    jbdone(); 
+    // ===============================================
+    
   } catch (error) {
-    window.log("An error occured during Lapse\nPlease restart console and try again...\nError definition: " + error);
-  }
-}
+// ... (باقي الكود)
 // Make function globally accessible
 window.doJBwithPSFreeLapseExploit = doJBwithPSFreeLapseExploit;
 //================================================================================================

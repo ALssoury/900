@@ -20,6 +20,33 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="bundle_reference.js"></script>
+    
+<script>
+    // دالة جديدة لتحميل أي حمولة يختارها المستخدم بعد نجاح الاستغلال
+    async function loadCustomPayload(payloadFileName) {
+        // إخفاء القائمة عند بدأ التحميل
+        document.getElementById("mymenu").style.display = 'none'; 
+        
+        // عرض رسالة التحميل في مكان رسائل النظام
+        window.log(`[PAYLOAD] Loading ${payloadFileName}...`);
+        
+        // استخدام دالة التحميل الموجودة في bundle.js
+        const jb_step_status = await PayloadLoader(payloadFileName, 1); 
+
+        if (jb_step_status === 1) {
+            window.log(`[SUCCESS] ${payloadFileName} loaded successfully.`);
+        } else {
+            window.log(`[ERROR] Failed to load ${payloadFileName}.`);
+        }
+    }
+  // لإظهار القائمة بعد اكتمال تحميل GoldHEN الافتراضي
+function jbdone() {
+        document.getElementById("loadingContainer").style.display = 'none';
+        document.getElementById("mymenu").style.display = 'block';
+{ // تم تصحيح مكان القوس الختامي
+</script>
+</head>
   <meta charset="UTF-8">
   <title>ALssouRy_Station</title>
   <style>
@@ -78,17 +105,59 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   <script src="bundle.js"></script>
 <script src="bundle_reference.js"></script>
 </head>
-<body>
+<body style="text-align: center;margin-top: 5%;">
     <script>
         // هذا الكود يستدعي ملف cache.html للتخزين المؤقت أولاً
         if (window.applicationCache.status === 0) {
             window.location.replace("cache.html");
         }
     </script>
-<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10;">
-  <img src="alssoury_logo.png" alt="ALSSOURY STATION Logo" style="max-width: 300px; height: auto; display: block; margin: 0 auto;">
+<div id="mymenu" style="display:none; text-align: center; margin-top: 50px;">
+    
+    <h1 style="font-size:25px; color: #E0E0E0; margin-bottom: 20px;">
+        خيارات إضافية (Payloads)
+    </h1>
+
+    <div style="margin: 15px;">
+        <p style="font-size:18px; color: #999;">تغيير إصدار GoldHEN:</p>
+        <button class="btn" onclick="loadCustomPayload('pl_goldhen23.bin')">GoldHEN 2.30</button>
+        <button class="btn" onclick="loadCustomPayload('pl_goldhenlite.bin')">GoldHEN Lite</button>
+        <button class="btn" onclick="loadCustomPayload('pl_goldhenbeta.bin')">GoldHEN Beta</button>
+    </div>
+    
+    <hr style="width: 80%; border-color: #333;">
+
+    <div style="margin: 15px;">
+        <p style="font-size:18px; color: #999;">أدوات إضافية:</p>
+        <button class="btn" onclick="loadCustomPayload('pl_ftp.bin')">FTP Server</button>
+        <button class="btn" onclick="loadCustomPayload('pl_ps4debug.bin')">PS4 Debug</button>
+        <button class="btn" onclick="loadCustomPayload('pl_appdumper.bin')">App Dumper</button>
+        <button class="btn" onclick="loadCustomPayload('pl_app2usb.bin')">App2USB</button>
+    </div>
+    
+    <hr style="width: 80%; border-color: #333;">
+
+    <div style="margin: 15px;">
+        <p style="font-size:18px; color: #999;">النظام والتحميل:</p>
+        <button class="btn" onclick="loadCustomPayload('pl_OrbisToolbox.bin')">Orbis Toolbox</button>
+        <button class="btn" onclick="loadCustomPayload('pl_disableupdates.bin')">Disable Updates</button>
+        <button class="btn" onclick="loadCustomPayload('pl_kerneldumper.bin')">Kernel Dumper</button>
+    </div>
+
+    <hr style="width: 80%; border-color: #333;">
+
+    <div style="margin: 15px;">
+        <p style="font-size:18px; color: #999;">Linux Loaders:</p>
+        <button class="btn" onclick="loadCustomPayload('pl_LinuxLoader.js')">Linux 1GB</button>
+        <button class="btn" onclick="loadCustomPayload('pl_LinuxLoader3gb.js')">Linux 3GB</button>
+    </div>
+    
+    <div style="margin-top: 50px;">
+        <p style="color: #999; font-size: 16px;">
+            **ملاحظة:** يجب تحميل GoldHEN أولاً لتشغيل معظم هذه الخيارات الإضافية.
+        </p>
+    </div>
 </div>
-  <div class="card">
     <a href="https://alssoury.github.io/MS" class="back-button" style="
         display: block;
         margin: 20px auto; /* لضبط التباعد وتوسيط الزر */
