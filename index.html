@@ -75,18 +75,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       overflow-y: auto;
     }
   </style>
+  <script src="bundle.js"></script>
+<script src="bundle_reference.js"></script>
 </head>
 <body>
-  <script>
-    if (window.applicationCache.status === 0) {
-      window.location.replace("cache.html");
-    }
-  </script>
+    <script>
+        // هذا الكود يستدعي ملف cache.html للتخزين المؤقت أولاً
+        if (window.applicationCache.status === 0) {
+            window.location.replace("cache.html");
+        }
+    </script>
 <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10;">
   <img src="alssoury_logo.png" alt="ALSSOURY STATION Logo" style="max-width: 300px; height: auto; display: block; margin: 0 auto;">
 </div>
   <div class="card">
-<body>
     <a href="https://alssoury.github.io/MS" class="back-button" style="
         display: block;
         margin: 20px auto; /* لضبط التباعد وتوسيط الزر */
