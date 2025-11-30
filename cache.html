@@ -4,11 +4,16 @@
     <meta charset="utf-8">
     <title>Service Worker Installer</title>
     <style>
+      /* تصميم بسيط لعرض حالة التخزين */
       body {
         background-color: #252526;
         color: #cccccc;
         font-family: "Segoe UI", Tahoma, sans-serif;
         text-align: center;
+        padding: 20px;
+      }
+      h2 {
+        color: #4CAF50; /* لون أخضر للحالة */
       }
       #console {
         margin-top: 50px;
@@ -20,32 +25,48 @@
         border-radius: 6px;
         text-align: left;
         display: inline-block;
+        width: 90%;
+        max-width: 600px;
+        min-height: 100px;
+        overflow-y: auto;
       }
     </style>
   </head>
   <body>
     <h2>Caching Files... Please Wait.</h2>
-    <pre id="console"></pre>
+    <pre id="console">Loading...</pre>
     <script>
       const outputConsole = document.getElementById("console");
-      window.log = (msg) => { outputConsole.textContent += msg + "\n"; };
+      // دالة بسيطة لتسجيل الرسائل في الواجهة والكونسول
+      window.log = (msg) => { 
+        outputConsole.textContent += msg + "\n";
+        outputConsole.scrollTop = outputConsole.scrollHeight; // التمرير للأسفل تلقائياً
+        console.log(msg); // للمطورين
+      };
 
       document.addEventListener('DOMContentLoaded', () => {
         window.log("Starting Service Worker registration...");
 
         if ('serviceWorker' in navigator) {
+          // تسجيل Service Worker
           navigator.serviceWorker.register('/sw.js', { scope: './' })
             .then(function(reg) {
               window.log("[SUCCESS] Service Worker registered.");
-              window.log("[INFO] Caching files (v12) in the background...");
-              window.log("Redirecting to Exploit Page (index.html) in 5 seconds...");
-setTimeout(function() { window.location.replace("900.html"); }, 5000);
+              // تم تحديث اسم الكاش هنا ليطابق الإصدار الجديد v22 في sw.js
+              window.log("[INFO] Caching files (v22) in the background..."); 
+              
+              // التوجيه الآن إلى صفحة الاستغلال الرئيسية 900.html بعد 5 ثوانٍ
+              window.log("Redirecting to Exploit Page (900.html) in 5 seconds...");
+              setTimeout(function() { window.location.replace("900.html"); }, 5000);
             })
             .catch(function(error) {
               window.log("[ERROR] Service Worker registration failed: " + error);
+              window.log("Attempting direct redirect to 900.html...");
+              setTimeout(function() { window.location.replace("900.html"); }, 2000);
             });
         } else {
-          window.log("[ERROR] Service Worker not supported!");
+          window.log("[WARNING] Service Worker not supported. Redirecting to 900.html directly.");
+          setTimeout(function() { window.location.replace("900.html"); }, 5000);
         }
       });
     </script>
