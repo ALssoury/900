@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Service Worker Installer</title>
+    <style>
+      body {
+        background-color: #252526;
+        color: #cccccc;
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        text-align: center;
+      }
+      #console {
+        margin-top: 50px;
+        font-family: monospace;
+        background-color: #1e1e1e;
+        color: #cccccc;
+        border: 1px solid #3c3c3c;
+        padding: 12px;
+        border-radius: 6px;
+        text-align: left;
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Caching Files... Please Wait.</h2>
+    <pre id="console"></pre>
+    <script>
+      const outputConsole = document.getElementById("console");
+      window.log = (msg) => { outputConsole.textContent += msg + "\n"; };
+
+      document.addEventListener('DOMContentLoaded', () => {
+        window.log("Starting Service Worker registration...");
+
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/sw.js', { scope: './' })
+            .then(function(reg) {
+              window.log("[SUCCESS] Service Worker registered.");
+              window.log("[INFO] Caching files (v12) in the background...");
+              window.log("Redirecting to Exploit Page (index.html) in 5 seconds...");
+              setTimeout(function() { window.location.replace("index.html"); }, 5000);
+            })
+            .catch(function(error) {
+              window.log("[ERROR] Service Worker registration failed: " + error);
+            });
+        } else {
+          window.log("[ERROR] Service Worker not supported!");
+        }
+      });
+    </script>
+  </body>
+</html>
