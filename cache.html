@@ -2,71 +2,100 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Service Worker Installer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALssouRy_Station - Caching...</title>
     <style>
-      /* تصميم بسيط لعرض حالة التخزين */
       body {
         background-color: #252526;
         color: #cccccc;
-        font-family: "Segoe UI", Tahoma, sans-serif;
+        font-family: 'Liberation Mono', monospace; /* استخدام الخط الذي تم تخزينه مؤقتاً */
         text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
         padding: 20px;
       }
       h2 {
-        color: #4CAF50; /* لون أخضر للحالة */
+        color: #ff9900;
+        font-size: 24px;
+        margin-bottom: 30px;
       }
       #console {
-        margin-top: 50px;
+        margin-top: 20px;
         font-family: monospace;
         background-color: #1e1e1e;
         color: #cccccc;
-        border: 1px solid #3c3c3c;
-        padding: 12px;
-        border-radius: 6px;
+        border: 1px solid #444444;
+        padding: 15px;
+        border-radius: 8px;
         text-align: left;
         display: inline-block;
-        width: 90%;
-        max-width: 600px;
-        min-height: 100px;
+        max-width: 90%;
+        min-width: 300px;
+        max-height: 40vh;
         overflow-y: auto;
+      }
+      .info-text {
+        color: #999999;
+        font-size: 14px;
+        margin-top: 20px;
       }
     </style>
   </head>
   <body>
-    <h2>Caching Files... Please Wait.</h2>
-    <pre id="console">Loading...</pre>
+    <h2>جاري تخزين الملفات مؤقتاً... يرجى الانتظار</h2>
+    <div id="console-container">
+      <pre id="console">Log:</pre>
+    </div>
+    <p class="info-text">
+      تهدف هذه العملية لتمكين الاستغلال دون الحاجة للاتصال بالإنترنت.
+    </p>
+
     <script>
+      // رقم إصدار الكاش الحالي - يجب أن يتطابق مع الرقم في sw.js
+      const CACHE_VERSION = 'v22'; 
+      const REDIRECT_DELAY_MS = 5000; // 5 ثواني للتوجيه
+
+      // دالة لتسجيل الرسائل في الكونسول على الشاشة
       const outputConsole = document.getElementById("console");
-      // دالة بسيطة لتسجيل الرسائل في الواجهة والكونسول
       window.log = (msg) => { 
-        outputConsole.textContent += msg + "\n";
+        outputConsole.textContent += `\n[${new Date().toLocaleTimeString()}] ${msg}`; 
         outputConsole.scrollTop = outputConsole.scrollHeight; // التمرير للأسفل تلقائياً
-        console.log(msg); // للمطورين
       };
 
       document.addEventListener('DOMContentLoaded', () => {
-        window.log("Starting Service Worker registration...");
+        window.log("بدء عملية تسجيل Service Worker...");
 
         if ('serviceWorker' in navigator) {
-          // تسجيل Service Worker
+          // تسجيل ملف الـ Service Worker
           navigator.serviceWorker.register('/sw.js', { scope: './' })
             .then(function(reg) {
-              window.log("[SUCCESS] Service Worker registered.");
-              // تم تحديث اسم الكاش هنا ليطابق الإصدار الجديد v22 في sw.js
-              window.log("[INFO] Caching files (v22) in the background..."); 
+              window.log("[نجاح] تم تسجيل Service Worker بنجاح.");
+              window.log(`[معلومة] جاري تخزين الملفات (${CACHE_VERSION}) في الخلفية...`);
+
+              // انتظار اكتمال التخزين (وهو ما يتم في حدث 'install' داخل sw.js)
+              window.log(`[توجيه] سيتم توجيهك إلى صفحة الاستغلال الرئيسية (900.html) خلال ${REDIRECT_DELAY_MS / 1000} ثوانٍ...`);
               
-              // التوجيه الآن إلى صفحة الاستغلال الرئيسية 900.html بعد 5 ثوانٍ
-              window.log("Redirecting to Exploit Page (900.html) in 5 seconds...");
-              setTimeout(function() { window.location.replace("900.html"); }, 5000);
+              // التوجيه إلى صفحة الاستغلال الرئيسية بعد التأخير
+              setTimeout(function() { 
+                window.location.replace("index.html"); // تم التعديل للتوجيه إلى index.html الذي بدوره يوجه إلى 900.html
+              }, REDIRECT_DELAY_MS);
             })
             .catch(function(error) {
-              window.log("[ERROR] Service Worker registration failed: " + error);
-              window.log("Attempting direct redirect to 900.html...");
-              setTimeout(function() { window.location.replace("900.html"); }, 2000);
+              window.log("[خطأ] فشل تسجيل Service Worker: " + error);
+              window.log("[تحذير] سيتم التوجيه مباشرةً لمحاولة الاستغلال.");
+              // التوجيه حتى في حال الفشل لمحاولة الاستغلال عبر الشبكة
+              setTimeout(function() { 
+                window.location.replace("index.html");
+              }, REDIRECT_DELAY_MS);
             });
         } else {
-          window.log("[WARNING] Service Worker not supported. Redirecting to 900.html directly.");
-          setTimeout(function() { window.location.replace("900.html"); }, 5000);
+          window.log("[تحذير] Service Worker غير مدعوم في هذا المتصفح.");
+          window.log(`[توجيه] سيتم التوجيه مباشرةً إلى صفحة الاستغلال (index.html) خلال ${REDIRECT_DELAY_MS / 1000} ثوانٍ...`);
+          setTimeout(function() { window.location.replace("index.html"); }, REDIRECT_DELAY_MS);
         }
       });
     </script>

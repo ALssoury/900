@@ -1,24 +1,26 @@
 // =========================================================================
 // 1. تحديث اسم الكاش (إجباري بعد كل تعديل مهم)
-// يتم تغيير الرقم لتحديث جميع ملفات الكاش المخزنة في الجهاز
-const CACHE_NAME = 'alssoury-station-cache-v22'; // الإصدار الحالي: 22
+// تأكد من أن هذا يتطابق مع CACHE_VERSION في cache.html
+const CACHE_NAME = 'alssoury-station-cache-v23'; 
 // =========================================================================
 
-// قائمة الملفات التي يجب تخزينها مؤقتاً لضمان العمل دون اتصال بالإنترنت
+// قائمة بجميع الملفات التي يجب تخزينها مؤقتًا للعمل دون اتصال بالإنترنت
 const urlsToCache = [
-  '/',
-  'index.html', // ملف التوجيه (الرئيسي)
-  'cache.html', // ملف تثبيت الكاش
-  '/900.html', // <--- صفحة الاستغلال والمنيو الرئيسية
-  '/alssoury_1ogo.jpg', // صورة الشعار أو الخلفية
-  '/fonts/LiberationMono-Regular.ttf', // الخطوط
-  '/payload.js', // ملفات مساعدة للبايلود
-  './alert.mjs',
-  '/bundle.js', // ملف الاستغلال المدمج
+  '/', // المسار الجذر
+  '/index.html', // ملف القائمة الرئيسية
+  '/cache.html', // ملف تثبيت الكاش
+  '/900.html', // ملف تحميل الاستغلال الأساسي
+  
+  // ملفات الموارد (CSS/JS/صور/خطوط)
+  '/alssoury_1ogo.jpg',
+  '/fonts/LiberationMono-Regular.ttf', 
+  '/payload.js',
+  '/alert.mjs',
+  '/bundle.js', 
   '/bundle_reference.js', 
   
-  // ملفات البايلود الثابتة (.bin)
-  '/payload.bin', // البايلود الأساسي (GoldHEN الرئيسي)
+  // ملفات البايلود الثابتة (BIN/JS)
+  '/payload.bin', // البايلود الرئيسي (GoldHEN)
   '/aio_patches.bin', // بايلود AIO Fix الضروري
   '/pl_goldhen23.bin',
   '/pl_goldhenlite.bin',
@@ -34,57 +36,65 @@ const urlsToCache = [
   '/pl_LinuxLoader3gb.js',
 ];
 
-// -------------------------------------------------------------------------
-// 2. حدث 'install': لتخزين الملفات
-// -------------------------------------------------------------------------
+// حدث 'install': يتم تفعيله عند تثبيت Service Worker لأول مرة
 self.addEventListener('install', (event) => {
+  console.log('[Service Worker] Install Event: Caching static assets...');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('Opened cache');
-        return cache.addAll(urlsToCache); // تخزين جميع الملفات المحددة مؤقتًا
+        console.log('[Service Worker] Opened cache, adding all URLs.');
+        // تخزين جميع الملفات المحددة مؤقتًا
+        return cache.addAll(urlsToCache); 
       })
-      .then(() => self.skipWaiting()) // لتنشيط Service Worker الجديد فورًا
+      // تفعيل Service Worker الجديد فورًا لتجنب انتظار إغلاق الصفحات القديمة
+      .then(() => self.skipWaiting()) 
+      .catch((error) => {
+        console.error('[Service Worker] Failed to cache all assets:', error);
+      })
   );
 });
 
-// -------------------------------------------------------------------------
-// 3. حدث 'fetch': اعتراض طلبات الشبكة للتحميل من الكاش أولاً
-// -------------------------------------------------------------------------
+// حدث 'fetch': يتم تفعيله عند كل طلب شبكة من الصفحة
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
-        // إذا وجد الملف في الكاش، قم بإرجاعه مباشرةً
+        // إذا كان الملف موجوداً في الكاش، قم بإرجاعه
         if (response) {
           return response;
         }
         
-        // إذا لم يوجد، قم بطلب الملف من الشبكة (ويتم تخزينه مؤقتاً إذا كان طلباً ناجحاً)
+        // إذا لم يكن موجوداً، حاول جلبه من الشبكة
         return fetch(event.request)
           .then((response) => {
-            // تحقق من أن الاستجابة صالحة (status 200)
+            // تحقق من أن الاستجابة صالحة (النوع أساسي و الحالة 200)
             if (!response || response.status !== 200 || response.type !== 'basic') {
               return response;
             }
             
-            // استنساخ الاستجابة لتخزين نسخة في الكاش
+            // استنساخ الاستجابة لوضع نسخة في الكاش وإرجاع الأخرى للمتصفح
             const responseToCache = response.clone();
             caches.open(CACHE_NAME)
               .then((cache) => {
-                // تخزين الطلب الناجح الجديد في الكاش
-                cache.put(event.request, responseToCache);
+                // تخزين الطلب في الكاش إذا كان GET (افتراضياً)
+                if (event.request.method === 'GET') {
+                    cache.put(event.request, responseToCache);
+                }
               });
             return response;
+          })
+          .catch((error) => {
+              console.warn('[Service Worker] Fetch failed, file not in cache:', event.request.url, error);
+              // استجابة احتياطية لخطأ الشبكة
+              return new Response("Network error and not found in cache.");
           });
       })
   );
 });
 
-// -------------------------------------------------------------------------
-// 4. حدث 'activate': لحذف الكاشات القديمة
-// -------------------------------------------------------------------------
+// حدث 'activate': يتم تفعيله عند تنشيط Service Worker جديد
 self.addEventListener('activate', (event) => {
+  console.log('[Service Worker] Activate Event: Cleaning old caches...');
   const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -92,11 +102,13 @@ self.addEventListener('activate', (event) => {
         cacheNames.map((cacheName) => {
           // حذف أي كاش قديم لا يتطابق مع CACHE_NAME الحالي
           if (cacheWhitelist.indexOf(cacheName) === -1) {
-            console.log('Deleting old cache:', cacheName);
-            return caches.delete(cacheName); // حذف أي كاش قديم
+            console.log('[Service Worker] Deleting old cache:', cacheName);
+            return caches.delete(cacheName); 
           }
         })
       );
     })
+    // تأكد من أن Service Worker يتولى التحكم في الصفحات المفتوحة فوراً
+    .then(() => self.clients.claim()) 
   );
 });
