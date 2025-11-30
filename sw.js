@@ -1,23 +1,23 @@
 // =========================================================================
 // 1. تحديث اسم الكاش (إجباري بعد كل تعديل مهم)
-const CACHE_NAME = 'alssoury-station-cache-v14'; 
+const CACHE_NAME = 'alssoury-station-cache-v20'; 
 // =========================================================================
 
 const urlsToCache = [
   '/',
-  '/index.html', // أو '/900.html' إذا كنت تستخدمه كملف رئيسي
-  // '/cache.html', // يمكن إبقاؤه أو إزالته
-  // تم إزالة ملف '/btn.css' من القائمة
+  '/900.html', // <--- تم إضافة الملف الرئيسي الحالي
+  '/cache.html', // للتخزين
+  // تم إزالة '/index.html' و '/btn.css'
   '/alssoury_1ogo.jpg',
-  // '/alssoury_logo.png', // أبقِها إذا كانت مستخدمة
-  '/fonts/LiberationMono-Regular.ttf', // أبقِها إذا كانت مستخدمة
+  '/fonts/LiberationMono-Regular.ttf', 
   '/payload.js',
   './alert.mjs',
-  '/bundle.js', // ملف الاستغلال الرئيسي
-  '/bundle_reference.js', // الملف الثانوي الملحق
+  '/bundle.js', 
+  '/bundle_reference.js', 
   
   // ملفات البايلود الثابتة
   '/payload.bin', 
+  '/aio_patches.bin', // <--- تم إضافة بايلود AIO Fix الضروري
   '/pl_goldhen23.bin',
   '/pl_goldhenlite.bin',
   '/pl_goldhenbeta.bin',
