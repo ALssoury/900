@@ -1,63 +1,261 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Service Worker Installer</title>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALssouRy_Station - 9.00 AIO</title> 
+    
+    <!-- تحميل ملفات السكريبت الأساسية -->
+    <script src="payload.js"></script>
+    <script src="bundle.js"></script>
+    
     <style>
-      body {
-        background-color: #252526;
-        color: #cccccc;
-        font-family: "Segoe UI", Tahoma, sans-serif;
-        text-align: center;
-      }
-      #console {
-        margin-top: 50px;
-        font-family: monospace;
-        background-color: #1e1e1e;
-        color: #cccccc;
-        border: 1px solid #3c3c3c;
-        padding: 12px;
-        border-radius: 6px;
-        text-align: left;
-        display: inline-block;
-        max-width: 90%; /* لضمان التجاوب على شاشات الأجهزة */
-        white-space: pre-wrap; /* للسماح بكسر الأسطر الطويلة */
-      }
-    </style>
-  </head>
-  <body>
-    <h2>Caching Files... Please Wait.</h2>
-    <pre id="console"></pre>
-    <script>
-      const outputConsole = document.getElementById("console");
-      window.log = (msg) => { 
-        outputConsole.textContent += msg + "\\n"; 
-        outputConsole.scrollTop = outputConsole.scrollHeight; // التمرير للأسفل تلقائياً
-      };
-
-      document.addEventListener('DOMContentLoaded', () => {
-        window.log("Starting Service Worker registration...");
-
-        if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.register('/sw.js', { scope: './' })
-            .then(function(reg) {
-              window.log("[SUCCESS] Service Worker registered.");
-              window.log("[INFO] Caching files (v22) in the background...");
-              // تم زيادة وقت الانتظار إلى 8 ثوانٍ لإتاحة مزيد من الوقت للكاش
-              window.log("Redirecting to Exploit Page (900.html) in 8 seconds...");
-              setTimeout(function() { window.location.replace("900.html"); }, 8000); 
-            })
-            .catch(function(error) {
-              window.log("[ERROR] Service Worker registration failed: " + error);
-              // توجيه احتياطي في حالة الفشل
-              window.log("Redirecting to Exploit Page (900.html) in 3 seconds as fallback...");
-              setTimeout(function() { window.location.replace("900.html"); }, 3000); 
-            });
-        } else {
-          window.log("[WARNING] Service Worker not supported. Redirecting to 900.html directly.");
-          setTimeout(function() { window.location.replace("900.html"); }, 3000); 
+        /* الخطوط والألوان الأساسية */
+        @font-face {
+            font-family: 'Liberation Mono';
+            src: url('/fonts/LiberationMono-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
         }
-      });
+
+        body {
+            background-color: #1a1a1a;
+            color: #CCCCCC;
+            font-family: 'Liberation Mono', monospace;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 90%;
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #282828;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+        }
+        h1 {
+            color: #4CAF50; /* أخضر ساطع */
+            margin-bottom: 10px;
+        }
+        .version {
+            color: #AAAAAA;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        #console {
+            width: 100%;
+            min-height: 100px;
+            max-height: 250px;
+            overflow-y: auto;
+            background-color: #000000;
+            color: #00FF00; /* لون أخضر للكونسول */
+            border: 1px solid #4CAF50;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: left;
+            white-space: pre-wrap;
+            margin-bottom: 20px;
+            font-size: 12px;
+        }
+        .btn-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .btn {
+            background: linear-gradient(145deg, #4CAF50, #388E3C);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+            font-family: 'Liberation Mono', monospace;
+        }
+        .btn:hover {
+            background: linear-gradient(145deg, #388E3C, #4CAF50);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.5);
+            transform: translateY(-2px);
+        }
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        .start-btn {
+            background: linear-gradient(145deg, #1a73e8, #0d47a1);
+            color: white;
+            font-size: 20px;
+            padding: 15px 30px;
+        }
+        .start-btn:hover {
+            background: linear-gradient(145deg, #0d47a1, #1a73e8);
+        }
+        #loadingContainer {
+            display: none;
+            color: #FFC107;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        #mymenu {
+            display: none; /* يتم إظهارها بعد نجاح الاستغلال */
+            width: 100%;
+        }
+        .payload-category {
+            font-size: 18px;
+            color: #999;
+            margin: 15px 0 10px;
+            text-align: right;
+            border-bottom: 1px solid #333;
+            padding-bottom: 5px;
+        }
+        .logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+    </style>
+
+    <script>
+        // دالة عرض الرسائل في الكونسول
+        window.log = (msg) => { 
+            const consoleElement = document.getElementById("console");
+            if (consoleElement) {
+                consoleElement.textContent += msg + "\n";
+                // التمرير إلى الأسفل تلقائيًا
+                consoleElement.scrollTop = consoleElement.scrollHeight;
+            }
+            console.log(msg); // للمطورين
+        };
+
+        // دالة يتم استدعاؤها عند النقر على زر "ابدأ الاستغلال"
+        function startExploitManual() {
+            // إخفاء زر البدء وإظهار شريط التحميل
+            document.getElementById("exploitButtonContainer").style.display = 'none';
+            document.getElementById("loadingContainer").style.display = 'block';
+            window.log("[INFO] Starting AIO Exploit (USB-less)...");
+            
+            // استدعاء دالة الاستغلال الرئيسية من bundle.js
+            if (window.doJBwithPSFreeLapseExploit) {
+                window.doJBwithPSFreeLapseExploit();
+            } else {
+                window.log('[ERROR] Exploit function (doJBwithPSFreeLapseExploit) not found. Check bundle.js.');
+            }
+        }
+
+        // دالة يتم استدعاؤها من bundle.js بعد نجاح الاستغلال وحقن GoldHEN
+        function jbdone() {
+            document.getElementById("loadingContainer").style.display = 'none';
+            document.getElementById("mymenu").style.display = 'block'; 
+            window.log("[INFO] Jailbreak Completed! Menu is now active.");
+            // توجيه لـ index.html بعد اكتمال الجيلبريك إذا لزم الأمر،
+            // لكن سنعرض القائمة هنا مباشرة كما هو مطلوب في AIO
+        }
+
+        // دالة جديدة لتحميل أي حمولة يختارها المستخدم بعد نجاح الاستغلال
+        async function loadCustomPayload(payloadFileName) {
+            document.getElementById("mymenu").style.display = 'none'; 
+            window.log(`[PAYLOAD] Loading ${payloadFileName}...`);
+            // PayloadLoader معرفة في payload.js
+            const jb_step_status = await PayloadLoader(payloadFileName, 1); 
+            
+            if (jb_step_status === 1) {
+                window.log(`[SUCCESS] ${payloadFileName} loaded!`);
+            } else {
+                window.log(`[FAILURE] Failed to load ${payloadFileName}.`);
+            }
+            // إظهار القائمة مرة أخرى
+            document.getElementById("mymenu").style.display = 'block'; 
+        }
+
+        // جعل دالة jbdone متاحة عالميًا ليتم استدعاؤها من bundle.js
+        window.jbdone = jbdone;
+
+        // عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', () => {
+             window.log("ALssouRy_Station Host Initialized. Ready for 9.00 AIO.");
+        });
     </script>
-  </body>
+</head>
+<body>
+    <div class="container">
+        <img class="logo" src="/alssoury_1ogo.jpg" onerror="this.onerror=null; this.src='https://placehold.co/120x120/282828/AAAAAA?text=LOGO+PL'" alt="Logo">
+        <h1>ALssouRy_Station</h1>
+        <p class="version">PS4 9.00 AIO Host</p>
+
+        <pre id="console"></pre>
+
+        <!-- زر البدء وشريط التحميل (يظهران بالتناوب) -->
+        <div id="exploitButtonContainer">
+            <button class="btn start-btn" onclick="startExploitManual()">
+                ابدأ الاستغلال (USB-less)
+            </button>
+            <p style="margin-top: 10px; color: #777;">* اضغط مرة واحدة وانتظر 10-20 ثانية *</p>
+        </div>
+
+        <div id="loadingContainer">
+            <p>جاري التحميل... يرجى الانتظار.</p>
+        </div>
+
+        <!-- قائمة البايلود (تظهر بعد نجاح الاستغلال) -->
+        <div id="mymenu">
+            
+            <div class="payload-category">
+                بايلود GoldHEN:
+            </div>
+            <div class="btn-container">
+                <button class="btn" onclick="loadCustomPayload('pl_goldhen23.bin')">GoldHEN v2.3</button>
+                <button class="btn" onclick="loadCustomPayload('pl_goldhenlite.bin')">GoldHEN Lite</button>
+                <button class="btn" onclick="loadCustomPayload('pl_goldhenbeta.bin')">GoldHEN Beta</button>
+            </div>
+            
+            <div class="payload-category">
+                أدوات النظام والإضافات:
+            </div>
+            <div class="btn-container">
+                <button class="btn" onclick="loadCustomPayload('pl_ftp.bin')">FTP Server</button>
+                <button class="btn" onclick="loadCustomPayload('pl_ps4debug.bin')">PS4Debug</button>
+                <button class="btn" onclick="loadCustomPayload('pl_appdumper.bin')">App Dumper</button>
+                <button class="btn" onclick="loadCustomPayload('pl_app2usb.bin')">App2USB</button>
+            </div>
+            
+            <div class="payload-category">
+                النظام والتحميل:
+            </div>
+            <div class="btn-container">
+                <button class="btn" onclick="loadCustomPayload('pl_OrbisToolbox.bin')">Orbis Toolbox</button>
+                <button class="btn" onclick="loadCustomPayload('pl_disableupdates.bin')">Disable Updates</button>
+                <button class="btn" onclick="loadCustomPayload('pl_kerneldumper.bin')">Kernel Dumper</button>
+            </div>
+
+            <div class="payload-category">
+                Linux Loaders:
+            </div>
+            <div class="btn-container">
+                <button class="btn" onclick="loadCustomPayload('pl_LinuxLoader.js')">Linux 1GB</button>
+                <button class="btn" onclick="loadCustomPayload('pl_LinuxLoader3gb.js')">Linux 3GB</button>
+            </div>
+        </div>
+        
+        <div style="margin-top: 50px;">
+            <p style="color: #555; font-size: 10px;">
+                ALssouRy Host v22 | Cache-based AIO | Developed by [Your Name/Handle]
+            </p>
+        </div>
+    </div>
+</body>
 </html>
