@@ -1,4 +1,4 @@
-const CACHE_NAME = 'alssoury-station-cache-v6.4'5
+const CACHE_NAME = 'alssoury-station-cache-v7'
 
 const urlsToCache = [
   '/',
