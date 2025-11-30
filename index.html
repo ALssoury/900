@@ -2,16 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALssouRy_Station</title> 
     
+    <link rel="stylesheet" href="btn.css">
+    
     <script src="bundle.js"></script>
-    <script src="bundle_reference.js"></script>
     
     <script>
         // دالة جديدة لتحميل أي حمولة يختارها المستخدم بعد نجاح الاستغلال
         async function loadCustomPayload(payloadFileName) {
             document.getElementById("mymenu").style.display = 'none'; 
             window.log(`[PAYLOAD] Loading ${payloadFileName}...`);
+            // ملاحظة: دالة PayloadLoader موجودة في bundle.js أو ملفات أخرى
             const jb_step_status = await PayloadLoader(payloadFileName, 1); 
 
             if (jb_step_status === 1) {
@@ -21,15 +24,28 @@
             }
         }
         
-        // لإظهار القائمة بعد اكتمال تحميل GoldHEN الافتراضي
+        // لإظهار القائمة بعد اكتمال تحميل GoldHEN الافتراضي (يجب استدعاؤها من داخل دالة doJBwithPSFreeLapseExploit في bundle.js)
         function jbdone() {
             // يتم إخفاء شريط التحميل وعرض القائمة
             document.getElementById("loadingContainer").style.display = 'none'; 
             document.getElementById("mymenu").style.display = 'block';
         }
+
+        // Logging utility - للتأكد من وجود الدالة قبل استخدامها في loadCustomPayload
+        const outputConsole = document.getElementById("console");
+        window.log = (msg) => { 
+            const consoleElement = document.getElementById("console");
+            if (consoleElement) {
+                consoleElement.textContent += msg + "\n";
+                // التمرير للأسفل تلقائياً
+                consoleElement.scrollTop = consoleElement.scrollHeight;
+            }
+        };
+
     </script>
     
     <style>
+        /* إعادة تعريف الأنماط للتنظيف */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -39,31 +55,31 @@
         body {
             background: url('alssoury_1ogo.jpg') center center / cover no-repeat,
                         linear-gradient(to bottom right, #063FAB, #01258A);
-            
             color: white;
             font-family: Arial, sans-serif;
             height: 100vh;
             display: flex;
-            flex-direction: column; /* تم التعديل للسماح بترتيب العناصر */
+            flex-direction: column; 
             justify-content: center;
             align-items: center;
-            overflow: auto; /* تم التعديل للسماح بالتمرير إذا كانت القائمة طويلة */
+            overflow: auto; 
         }
 
         @font-face {
             font-family: 'logging';
             src: url('fonts/LiberationMono-Regular.ttf');
         }
-
-        .card {
+        
+        /* فئة جديدة للقائمة لتنظيف الستايل المضمن */
+        .menu-card {
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(10px);
-            padding: 40px;
+            padding: 40px 20px;
             border-radius: 20px;
-            text-align: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
             width: 90%;
             max-width: 700px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            margin-top: 50px; /* تم إبقاء مسافة علوية هنا */
         }
 
         h1 {
@@ -82,16 +98,30 @@
             white-space: pre-wrap;
             height: 300px;
             overflow-y: auto;
-            width: 90%; /* إضافة عرض محدد للكونسول */
+            width: 90%; 
             max-width: 700px;
             margin: 20px auto;
+        }
+        
+        .back-button {
+            display: block;
+            margin: 20px auto; 
+            text-align: center;
+            padding: 15px 30px; 
+            background-color: #007bff; 
+            color: white;
+            text-decoration: none; 
+            border-radius: 8px; 
+            width: fit-content; 
+            font-size: 18px; 
+            transition: background-color 0.3s ease; 
         }
     </style>
 </head>
 
-<body style="text-align: center;margin-top: 5%;">
+<body style="text-align: center;">
 
-    <div id="loadingContainer" style="display:block;">
+    <div id="loadingContainer" style="display:block; margin-top: 5%;">
         <div id="progress" style="display:block;">
             <h1 style="font-size:25px;text-align:center; color: #E0E0E0;">
                 جاري تشغيل الاستغلال... يرجى الانتظار!
@@ -99,7 +129,7 @@
         </div>
     </div>
 
-    <div id="mymenu" style="display:none; text-align: center; margin-top: 50px; width: 90%; max-width: 700px; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); padding: 40px 20px; border-radius: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.3);">
+    <div id="mymenu" class="menu-card" style="display:none;">
         
         <h1 style="font-size:25px; color: #E0E0E0; margin-bottom: 20px;">
             خيارات إضافية (Payloads)
@@ -112,7 +142,7 @@
             <button class="btn" onclick="loadCustomPayload('pl_goldhenbeta.bin')">GoldHEN Beta</button>
         </div>
         
-        <hr style="width: 80%; border-color: #333;">
+        <hr style="width: 80%; border-color: #333; margin: 15px auto;">
 
         <div style="margin: 15px;">
             <p style="font-size:18px; color: #999;">أدوات إضافية:</p>
@@ -122,7 +152,7 @@
             <button class="btn" onclick="loadCustomPayload('pl_app2usb.bin')">App2USB</button>
         </div>
         
-        <hr style="width: 80%; border-color: #333;">
+        <hr style="width: 80%; border-color: #333; margin: 15px auto;">
 
         <div style="margin: 15px;">
             <p style="font-size:18px; color: #999;">النظام والتحميل:</p>
@@ -131,7 +161,7 @@
             <button class="btn" onclick="loadCustomPayload('pl_kerneldumper.bin')">Kernel Dumper</button>
         </div>
 
-        <hr style="width: 80%; border-color: #333;">
+        <hr style="width: 80%; border-color: #333; margin: 15px auto;">
 
         <div style="margin: 15px;">
             <p style="font-size:18px; color: #999;">Linux Loaders:</p>
@@ -146,19 +176,7 @@
         </div>
     </div>
     
-    <a href="https://alssoury.github.io/MS" class="back-button" style="
-        display: block;
-        margin: 20px auto; 
-        text-align: center;
-        padding: 15px 30px; 
-        background-color: #007bff; 
-        color: white;
-        text-decoration: none; 
-        border-radius: 8px; 
-        width: fit-content; 
-        font-size: 18px; 
-        transition: background-color 0.3s ease; 
-    ">
+    <a href="https://alssoury.github.io/MS" class="back-button">
         Back To ALssouRy_Station
     </a>
     
@@ -166,6 +184,16 @@
     
     <script src="payload.js"></script>
     <script type="module" src="./alert.mjs"></script>
+    
+    <script>
+        if (window.doJBwithPSFreeLapseExploit) {
+            window.log("[INFO] Starting Exploit...");
+            window.doJBwithPSFreeLapseExploit();
+        } else {
+            // هذا يحدث فقط إذا كان ملف bundle.js غير محمل أو لا يحتوي على الدالة
+            window.log('[ERROR] Exploit function (doJBwithPSFreeLapseExploit) not found. Check bundle.js.');
+        }
+    </script>
 
 </body>
 </html>
