@@ -7,14 +7,29 @@
     
     <link rel="stylesheet" href="btn.css">
     
-<script src="main_exploit.js"></script>
+    <script src="bundle.js"></script>
+    <script src="bundle_reference.js"></script>
     
     <script>
+        // دالة يتم استدعاؤها عند النقر على زر "ابدأ الاستغلال"
+        function startExploitManual() {
+            // إخفاء زر البدء وإظهار شريط التحميل
+            document.getElementById("exploitButtonContainer").style.display = 'none';
+            document.getElementById("loadingContainer").style.display = 'block';
+            window.log("[INFO] Starting Exploit manually...");
+            
+            // استدعاء دالة الاستغلال الرئيسية
+            if (window.doJBwithPSFreeLapseExploit) {
+                window.doJBwithPSFreeLapseExploit();
+            } else {
+                window.log('[ERROR] Exploit function (doJBwithPSFreeLapseExploit) not found. Check bundle.js.');
+            }
+        }
+
         // دالة جديدة لتحميل أي حمولة يختارها المستخدم بعد نجاح الاستغلال
         async function loadCustomPayload(payloadFileName) {
             document.getElementById("mymenu").style.display = 'none'; 
             window.log(`[PAYLOAD] Loading ${payloadFileName}...`);
-            // ملاحظة: دالة PayloadLoader موجودة في bundle.js أو ملفات أخرى
             const jb_step_status = await PayloadLoader(payloadFileName, 1); 
 
             if (jb_step_status === 1) {
@@ -24,20 +39,18 @@
             }
         }
         
-        // لإظهار القائمة بعد اكتمال تحميل GoldHEN الافتراضي (يجب استدعاؤها من داخل دالة doJBwithPSFreeLapseExploit في bundle.js)
+        // لإظهار القائمة بعد اكتمال تحميل GoldHEN (يتم استدعاؤها من bundle.js)
         function jbdone() {
             // يتم إخفاء شريط التحميل وعرض القائمة
             document.getElementById("loadingContainer").style.display = 'none'; 
             document.getElementById("mymenu").style.display = 'block';
         }
 
-        // Logging utility - للتأكد من وجود الدالة قبل استخدامها في loadCustomPayload
-        const outputConsole = document.getElementById("console");
+        // Logging utility - لضمان عمل الكونسول
         window.log = (msg) => { 
             const consoleElement = document.getElementById("console");
             if (consoleElement) {
                 consoleElement.textContent += msg + "\n";
-                // التمرير للأسفل تلقائياً
                 consoleElement.scrollTop = consoleElement.scrollHeight;
             }
         };
@@ -45,7 +58,7 @@
     </script>
     
     <style>
-        /* إعادة تعريف الأنماط للتنظيف */
+        /* الأنماط العامة */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -70,7 +83,23 @@
             src: url('fonts/LiberationMono-Regular.ttf');
         }
         
-        /* فئة جديدة للقائمة لتنظيف الستايل المضمن */
+        /* نمط الزر الرئيسي الجديد للاستغلال */
+        .big-exploit-btn {
+            padding: 25px 50px;
+            font-size: 28px;
+            background-color: #ff4500; /* لون برتقالي ساطع وجذاب */
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 69, 0, 0.7);
+            transition: background-color 0.2s;
+            font-weight: bold;
+        }
+        .big-exploit-btn:hover {
+            background-color: #e63900;
+        }
+
         .menu-card {
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(10px);
@@ -79,12 +108,7 @@
             box-shadow: 0 0 20px rgba(0,0,0,0.3);
             width: 90%;
             max-width: 700px;
-            margin-top: 50px; /* تم إبقاء مسافة علوية هنا */
-        }
-
-        h1 {
-            font-size: 32px;
-            margin-bottom: 20px;
+            margin-top: 50px; 
         }
 
         #console {
@@ -120,8 +144,15 @@
 </head>
 
 <body style="text-align: center;">
+    
+    <div id="exploitButtonContainer" style="display:block; text-align: center; margin-top: 5%;">
+        <button id="startExploitBtn" onclick="startExploitManual()" class="big-exploit-btn">
+            ابدأ الاستغلال (Start Exploit)
+        </button>
+        <p style="color: #ccc; margin-top: 10px; font-size: 18px;">انقر للبدء يدوياً</p>
+    </div>
 
-    <div id="loadingContainer" style="display:block; margin-top: 5%;">
+    <div id="loadingContainer" style="display:none; margin-top: 5%;">
         <div id="progress" style="display:block;">
             <h1 style="font-size:25px;text-align:center; color: #E0E0E0;">
                 جاري تشغيل الاستغلال... يرجى الانتظار!
@@ -184,16 +215,6 @@
     
     <script src="payload.js"></script>
     <script type="module" src="./alert.mjs"></script>
-    
-    <script>
-        if (window.doJBwithPSFreeLapseExploit) {
-            window.log("[INFO] Starting Exploit...");
-            window.doJBwithPSFreeLapseExploit();
-        } else {
-            // هذا يحدث فقط إذا كان ملف bundle.js غير محمل أو لا يحتوي على الدالة
-            window.log('[ERROR] Exploit function (doJBwithPSFreeLapseExploit) not found. Check bundle.js.');
-        }
-    </script>
 
 </body>
 </html>
