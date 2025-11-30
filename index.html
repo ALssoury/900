@@ -83,21 +83,22 @@
             src: url('fonts/LiberationMono-Regular.ttf');
         }
         
-        /* نمط الزر الرئيسي الجديد للاستغلال */
+        /* نمط الزر الرئيسي الجديد للاستغلال - يستخدم نفس لون زر العودة */
         .big-exploit-btn {
             padding: 25px 50px;
             font-size: 28px;
-            background-color: #ff4500; /* لون برتقالي ساطع وجذاب */
+            background-color: #007bff; /* نفس لون زر العودة */
             color: white;
             border: none;
             border-radius: 15px;
             cursor: pointer;
-            box-shadow: 0 0 15px rgba(255, 69, 0, 0.7);
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.7); /* ظل مطابق للون */
             transition: background-color 0.2s;
             font-weight: bold;
+            margin-bottom: 20px; /* تباعد عن الكونسول */
         }
         .big-exploit-btn:hover {
-            background-color: #e63900;
+            background-color: #0056b3;
         }
 
         .menu-card {
@@ -127,12 +128,13 @@
             margin: 20px auto;
         }
         
+        /* زر العودة - نفس الأسلوب */
         .back-button {
             display: block;
             margin: 20px auto; 
             text-align: center;
             padding: 15px 30px; 
-            background-color: #007bff; 
+            background-color: #007bff; /* اللون الأزرق القياسي */
             color: white;
             text-decoration: none; 
             border-radius: 8px; 
@@ -140,81 +142,19 @@
             font-size: 18px; 
             transition: background-color 0.3s ease; 
         }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 
 <body style="text-align: center;">
     
-    <div id="exploitButtonContainer" style="display:block; text-align: center; margin-top: 5%;">
+    <a href="https://alssoury.github.io/MS" class="back-button" style="margin-top: 50px;">
+        Back To ALssouRy_Station
+    </a>
+
+    <div id="exploitButtonContainer" style="display:block; text-align: center; margin-top: 20px;">
         <button id="startExploitBtn" onclick="startExploitManual()" class="big-exploit-btn">
             ابدأ الاستغلال (Start Exploit)
         </button>
-        <p style="color: #ccc; margin-top: 10px; font-size: 18px;">انقر للبدء يدوياً</p>
-    </div>
-
-    <div id="loadingContainer" style="display:none; margin-top: 5%;">
-        <div id="progress" style="display:block;">
-            <h1 style="font-size:25px;text-align:center; color: #E0E0E0;">
-                جاري تشغيل الاستغلال... يرجى الانتظار!
-            </h1>
-        </div>
-    </div>
-
-    <div id="mymenu" class="menu-card" style="display:none;">
-        
-        <h1 style="font-size:25px; color: #E0E0E0; margin-bottom: 20px;">
-            خيارات إضافية (Payloads)
-        </h1>
-
-        <div style="margin: 15px;">
-            <p style="font-size:18px; color: #999;">تغيير إصدار GoldHEN:</p>
-            <button class="btn" onclick="loadCustomPayload('pl_goldhen23.bin')">GoldHEN 2.30</button>
-            <button class="btn" onclick="loadCustomPayload('pl_goldhenlite.bin')">GoldHEN Lite</button>
-            <button class="btn" onclick="loadCustomPayload('pl_goldhenbeta.bin')">GoldHEN Beta</button>
-        </div>
-        
-        <hr style="width: 80%; border-color: #333; margin: 15px auto;">
-
-        <div style="margin: 15px;">
-            <p style="font-size:18px; color: #999;">أدوات إضافية:</p>
-            <button class="btn" onclick="loadCustomPayload('pl_ftp.bin')">FTP Server</button>
-            <button class="btn" onclick="loadCustomPayload('pl_ps4debug.bin')">PS4 Debug</button>
-            <button class="btn" onclick="loadCustomPayload('pl_appdumper.bin')">App Dumper</button>
-            <button class="btn" onclick="loadCustomPayload('pl_app2usb.bin')">App2USB</button>
-        </div>
-        
-        <hr style="width: 80%; border-color: #333; margin: 15px auto;">
-
-        <div style="margin: 15px;">
-            <p style="font-size:18px; color: #999;">النظام والتحميل:</p>
-            <button class="btn" onclick="loadCustomPayload('pl_OrbisToolbox.bin')">Orbis Toolbox</button>
-            <button class="btn" onclick="loadCustomPayload('pl_disableupdates.bin')">Disable Updates</button>
-            <button class="btn" onclick="loadCustomPayload('pl_kerneldumper.bin')">Kernel Dumper</button>
-        </div>
-
-        <hr style="width: 80%; border-color: #333; margin: 15px auto;">
-
-        <div style="margin: 15px;">
-            <p style="font-size:18px; color: #999;">Linux Loaders:</p>
-            <button class="btn" onclick="loadCustomPayload('pl_LinuxLoader.js')">Linux 1GB</button>
-            <button class="btn" onclick="loadCustomPayload('pl_LinuxLoader3gb.js')">Linux 3GB</button>
-        </div>
-        
-        <div style="margin-top: 50px;">
-            <p style="color: #999; font-size: 16px;">
-                **ملاحظة:** يجب تحميل GoldHEN أولاً لتشغيل معظم هذه الخيارات الإضافية.
-            </p>
-        </div>
-    </div>
-    
-    <a href="https://alssoury.github.io/MS" class="back-button">
-        Back To ALssouRy_Station
-    </a>
-    
-    <pre id="console"></pre>
-    
-    <script src="payload.js"></script>
-    <script type="module" src="./alert.mjs"></script>
-
-</body>
-</html>
