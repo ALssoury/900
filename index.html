@@ -1,191 +1,115 @@
-<div id="mymenu" style="display:none; text-align: center; margin-top: 50px;">
-    
-    <h1 style="font-size:25px; color: #E0E0E0; margin-bottom: 20px;">
-        خيارات إضافية (Payloads)
-    </h1>
-    
-    <div style="margin: 15px;">
-        </div> <hr style="width: 80%; border-color: #333;">
-    <div style="margin: 15px;">
-        </div> ```
+<!--
+Copyright (C) 2023-2025 anonymous
 
-يجب عليك **إضافة الأزرار** في الأماكن المخصصة لها داخل وسم `<div>` الخاص بـ `id="mymenu"` لكي تظهر القائمة فعلاً وتعمل بشكل صحيح.
+This file is part of PSFree.
 
----
+PSFree is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
 
-### ✅ الكود النهائي والصحيح لملف `900.html`
+PSFree is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
 
-إليك ملف **`900.html`** بعد دمج الدوال، وتنظيف الهيكل، وإضافة الأزرار المفقودة. **استبدل محتوى ملف `900.html` بالكامل بالكود التالي:**
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+-->
 
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"> 
-    <title>ALssouRy_Station</title> 
-    
-    <script src="bundle.js"></script>
-    <script src="bundle_reference.js"></script>
-    
-    <script>
-        // دالة جديدة لتحميل أي حمولة يختارها المستخدم بعد نجاح الاستغلال
-        async function loadCustomPayload(payloadFileName) {
-            document.getElementById("mymenu").style.display = 'none'; 
-            window.log(`[PAYLOAD] Loading ${payloadFileName}...`);
-            const jb_step_status = await PayloadLoader(payloadFileName, 1); 
+  <meta charset="UTF-8">
+  <title>ALssouRy_Station</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-            if (jb_step_status === 1) {
-                window.log(`[SUCCESS] ${payloadFileName} loaded successfully.`);
-            } else {
-                window.log(`[ERROR] Failed to load ${payloadFileName}.`);
-            }
-        }
-        
-        // لإظهار القائمة بعد اكتمال تحميل GoldHEN الافتراضي
-        function jbdone() {
-            // يتم إخفاء شريط التحميل وعرض القائمة
-            document.getElementById("loadingContainer").style.display = 'none'; 
-            document.getElementById("mymenu").style.display = 'block';
+    body {
+      background: url('alssoury_1ogo.jpg') center center / cover no-repeat,
+                  linear-gradient(to bottom right, #063FAB, #01258A);
+      
+      color: white;
+      font-family: Arial, sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    @font-face {
+      font-family: 'logging';
+      src: url('fonts/LiberationMono-Regular.ttf');
+    }
+
+    .card {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      width: 90%;
+      max-width: 700px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    #console {
+      font-family: 'logging', monospace;
+      font-size: 18px;
+      text-align: left;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      border-radius: 10px;
+      white-space: pre-wrap;
+      height: 300px;
+      overflow-y: auto;
+    }
+  </style>
+  <script src="bundle.js"></script>
+<script src="bundle_reference.js"></script>
+</head>
+<body>
+    <script>
+        // هذا الكود يستدعي ملف cache.html للتخزين المؤقت أولاً
+        if (window.applicationCache.status === 0) {
+            window.location.replace("cache.html");
         }
     </script>
-    
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background: url('alssoury_1ogo.jpg') center center / cover no-repeat,
-                        linear-gradient(to bottom right, #063FAB, #01258A);
-            
-            color: white;
-            font-family: Arial, sans-serif;
-            height: 100vh;
-            display: flex;
-            flex-direction: column; /* تم التعديل للسماح بترتيب العناصر */
-            justify-content: center;
-            align-items: center;
-            overflow: auto; /* تم التعديل للسماح بالتمرير إذا كانت القائمة طويلة */
-        }
-
-        @font-face {
-            font-family: 'logging';
-            src: url('fonts/LiberationMono-Regular.ttf');
-        }
-
-        .card {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
-            width: 90%;
-            max-width: 700px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-
-        h1 {
-            font-size: 32px;
-            margin-bottom: 20px;
-        }
-
-        #console {
-            font-family: 'logging', monospace;
-            font-size: 18px;
-            text-align: left;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            white-space: pre-wrap;
-            height: 300px;
-            overflow-y: auto;
-            width: 90%; /* إضافة عرض محدد للكونسول */
-            max-width: 700px;
-            margin: 20px auto;
-        }
-    </style>
-</head>
-
-<body style="text-align: center;margin-top: 5%;">
-
-    <div id="loadingContainer" style="display:block;">
-        <div id="progress" style="display:block;">
-            <h1 style="font-size:25px;text-align:center; color: #E0E0E0;">
-                جاري تشغيل الاستغلال... يرجى الانتظار!
-            </h1>
-        </div>
-    </div>
-
-    <div id="mymenu" style="display:none; text-align: center; margin-top: 50px; width: 90%; max-width: 700px; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(10px); padding: 40px 20px; border-radius: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.3);">
-        
-        <h1 style="font-size:25px; color: #E0E0E0; margin-bottom: 20px;">
-            خيارات إضافية (Payloads)
-        </h1>
-
-        <div style="margin: 15px;">
-            <p style="font-size:18px; color: #999;">تغيير إصدار GoldHEN:</p>
-            <button class="btn" onclick="loadCustomPayload('pl_goldhen23.bin')">GoldHEN 2.30</button>
-            <button class="btn" onclick="loadCustomPayload('pl_goldhenlite.bin')">GoldHEN Lite</button>
-            <button class="btn" onclick="loadCustomPayload('pl_goldhenbeta.bin')">GoldHEN Beta</button>
-        </div>
-        
-        <hr style="width: 80%; border-color: #333;">
-
-        <div style="margin: 15px;">
-            <p style="font-size:18px; color: #999;">أدوات إضافية:</p>
-            <button class="btn" onclick="loadCustomPayload('pl_ftp.bin')">FTP Server</button>
-            <button class="btn" onclick="loadCustomPayload('pl_ps4debug.bin')">PS4 Debug</button>
-            <button class="btn" onclick="loadCustomPayload('pl_appdumper.bin')">App Dumper</button>
-            <button class="btn" onclick="loadCustomPayload('pl_app2usb.bin')">App2USB</button>
-        </div>
-        
-        <hr style="width: 80%; border-color: #333;">
-
-        <div style="margin: 15px;">
-            <p style="font-size:18px; color: #999;">النظام والتحميل:</p>
-            <button class="btn" onclick="loadCustomPayload('pl_OrbisToolbox.bin')">Orbis Toolbox</button>
-            <button class="btn" onclick="loadCustomPayload('pl_disableupdates.bin')">Disable Updates</button>
-            <button class="btn" onclick="loadCustomPayload('pl_kerneldumper.bin')">Kernel Dumper</button>
-        </div>
-
-        <hr style="width: 80%; border-color: #333;">
-
-        <div style="margin: 15px;">
-            <p style="font-size:18px; color: #999;">Linux Loaders:</p>
-            <button class="btn" onclick="loadCustomPayload('pl_LinuxLoader.js')">Linux 1GB</button>
-            <button class="btn" onclick="loadCustomPayload('pl_LinuxLoader3gb.js')">Linux 3GB</button>
-        </div>
-        
-        <div style="margin-top: 50px;">
-            <p style="color: #999; font-size: 16px;">
-                **ملاحظة:** يجب تحميل GoldHEN أولاً لتشغيل معظم هذه الخيارات الإضافية.
-            </p>
-        </div>
-    </div>
-    
+<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10;">
+  <img src="alssoury_logo.png" alt="ALSSOURY STATION Logo" style="max-width: 300px; height: auto; display: block; margin: 0 auto;">
+</div>
+  <div class="card">
     <a href="https://alssoury.github.io/MS" class="back-button" style="
         display: block;
-        margin: 20px auto; 
+        margin: 20px auto; /* لضبط التباعد وتوسيط الزر */
         text-align: center;
-        padding: 15px 30px; 
-        background-color: #007bff; 
+        padding: 15px 30px; /* نفس حجم الأزرار الأخرى في الصفحة الرئيسية تقريباً */
+        background-color: #007bff; /* لون أزرق جذاب */
         color: white;
-        text-decoration: none; 
-        border-radius: 8px; 
-        width: fit-content; 
-        font-size: 18px; 
-        transition: background-color 0.3s ease; 
+        text-decoration: none; /* لإزالة الخط تحت النص */
+        border-radius: 8px; /* حواف دائرية للزر */
+        width: fit-content; /* لجعل عرض الزر بحجم المحتوى فقط */
+        font-size: 18px; /* حجم الخط ليتناسب مع الأزرار الأخرى */
+        transition: background-color 0.3s ease; /* تأثير جميل عند التمرير */
     ">
         Back To ALssouRy_Station
     </a>
-    
+    </body>
+</a>
     <pre id="console"></pre>
-    
-    <script src="payload.js"></script>
-    <script type="module" src="./alert.mjs"></script>
+  </div>
 
+  <script src="payload.js"></script>
+  <script type="module" src="./alert.mjs"></script>
 </body>
 </html>
