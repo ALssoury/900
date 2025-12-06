@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.  */
 // PSFree is a WebKit exploit using CVE-2022-22620 to gain arbitrary read/write
 //
 // vulnerable:
-// * PS4 [6.50, 9.60)
+// * PS4 [6.00, 10.00)
 // * PS5 [1.00, 6.00)
 //
 // * CelesteBlue from ps4-dev on discord.com
