@@ -1,115 +1,105 @@
-<!--
-Copyright (C) 2023-2025 anonymous
-
-This file is part of PSFree.
-
-PSFree is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
-
-PSFree is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
-
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>.
--->
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>ALssouRy_Station</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background: url('alssoury_1ogo.jpg') center center / cover no-repeat,
-                  linear-gradient(to bottom right, #063FAB, #01258A);
-      
-      color: white;
-      font-family: Arial, sans-serif;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-
-    @font-face {
-      font-family: 'logging';
-      src: url('fonts/LiberationMono-Regular.ttf');
-    }
-
-    .card {
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(10px);
-      padding: 40px;
-      border-radius: 20px;
-      text-align: center;
-      width: 90%;
-      max-width: 700px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.3);
-    }
-
-    h1 {
-      font-size: 32px;
-      margin-bottom: 20px;
-    }
-
-    #console {
-      font-family: 'logging', monospace;
-      font-size: 18px;
-      text-align: left;
-      background: rgba(0, 0, 0, 0.7);
-      padding: 20px;
-      border-radius: 10px;
-      white-space: pre-wrap;
-      height: 300px;
-      overflow-y: auto;
-    }
-  </style>
-  <script src="bundle.js"></script>
-<script src="bundle_reference.js"></script>
-</head>
-<body>
-    <script>
-        // هذا الكود يستدعي ملف cache.html للتخزين المؤقت أولاً
-        if (window.applicationCache.status === 0) {
-            window.location.replace("cache.html");
-        }
-    </script>
-<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10;">
-  <img src="alssoury_logo.png" alt="ALSSOURY STATION Logo" style="max-width: 300px; height: auto; display: block; margin: 0 auto;">
-</div>
-  <div class="card">
-    <a href="https://alssoury.github.io/MS" class="back-button" style="
-        display: block;
-        margin: 20px auto; /* لضبط التباعد وتوسيط الزر */
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>PS4IDEA HOST Jailbreak</title>
+    <script src="./bundle.js"></script>
+    <style>
+      body {
+        background:url('alssoury_1ogo.jpg');
+        background-color: #252526;
+        color: #cccccc;
+        font-family: "Segoe UI", Tahoma, sans-serif;
         text-align: center;
-        padding: 15px 30px; /* نفس حجم الأزرار الأخرى في الصفحة الرئيسية تقريباً */
-        background-color: #007bff; /* لون أزرق جذاب */
-        color: white;
-        text-decoration: none; /* لإزالة الخط تحت النص */
-        border-radius: 8px; /* حواف دائرية للزر */
-        width: fit-content; /* لجعل عرض الزر بحجم المحتوى فقط */
-        font-size: 18px; /* حجم الخط ليتناسب مع الأزرار الأخرى */
-        transition: background-color 0.3s ease; /* تأثير جميل عند التمرير */
-    ">
-        Back To ALssouRy_Station
-    </a>
-    </body>
-</a>
+      }
+      h2 {
+        margin-bottom: 20px;
+      }
+      #console {
+        font-family: monospace;
+        background-color: #1e1e1e;
+        color: #cccccc;
+        border: 1px solid #3c3c3c;
+        padding: 12px;
+        border-radius: 6px;
+        margin-top: 20px;
+        text-align: left;
+      }
+      #jailbreakBtn {
+        margin-top: 20px;
+        padding: 12px 24px;
+        font-size: 18px;
+        font-weight: bold;
+        background: #007acc;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      #jailbreakBtn:disabled {
+        background: #555555;
+        color: #aaaaaa;
+        cursor: not-allowed;
+      }
+      #jailbreakBtn:not(:disabled):hover {
+        background: #005a9e;
+      }
+      footer {
+        margin-top: 30px;
+        font-size: 14px;
+        color: #888;
+      }
+    </style>
+    <script>
+      if ((window.applicationCache.status == '0') || (window.applicationCache.status == '3')) { // 0: UNCACHED, 3: IDLE
+        window.location.replace("cache.html");
+      }
+    </script>
+  </head>
+  <body>
+    <h2> PS4IDEA HOST 7.00 - 9.60 </h2>
+    <div>
+      <button id="jailbreakBtn">Start Jailbreak</button>
+    </div>
     <pre id="console"></pre>
-  </div>
-
-  <script src="payload.js"></script>
-  <script type="module" src="./alert.mjs"></script>
-</body>
+    <footer>
+       <h1>  THIS HOST FROM PS4IDEA
+        <h2>   SPICIAL THANKS <strong>Feyzee</strong>
+    </footer>
+  </body>
+  <script>
+    // Logging utility
+    const outputConsole = document.getElementById("console");
+    window.log = (msg, color="#cccccc") => { outputConsole.innerHTML += `<span style="color:${color}">${msg}</span><br>`; };
+    // Event definitions
+    addEventListener('unhandledrejection', event => {
+      const reason = event.reason;
+      alert(
+        'Unhandled rejection\n'
+        + `${reason}\n`
+        + `${reason.sourceURL}:${reason.line}:${reason.column}\n`
+        + `${reason.stack}`
+      );
+    });
+    addEventListener('error', event => {
+      const reason = event.error;
+      alert(
+        'Unhandled error\n'
+        + `${reason}\n`
+        + `${reason.sourceURL}:${reason.line}:${reason.column}\n`
+        + `${reason.stack}`
+      );
+      return true; // Used for not to show error message on console
+    });
+    // Button click
+    document.getElementById("jailbreakBtn").addEventListener("click", () => {
+      // Disable to prevent double click
+      document.getElementById("jailbreakBtn").disabled = true;
+      outputConsole.textContent = ""; // Clear console log
+      try {
+        doJBwithPSFreeLapseExploit();
+      } catch (error) {
+        window.log("An error occured during exploit: " + error, "red");
+      }
+    });
+  </script>
 </html>
